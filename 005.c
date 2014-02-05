@@ -1,5 +1,5 @@
 /****
- * Problem 5
+ * Problem 5 - Smallest multiple
  */
 #include <stdio.h>
 #include <math.h>
