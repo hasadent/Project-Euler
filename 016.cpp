@@ -1,5 +1,5 @@
 /****
- * Problem 13 - Large sum
+ * Problem 16 - Power digit sum
  */
 #include <iostream>
 #include <sstream>
