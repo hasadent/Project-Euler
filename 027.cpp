@@ -32,7 +32,6 @@ int main()
          for (int j = i*2; j < PRIME_MAX; j += i)
            prime[j] = 1;
 
-    bool solved = false;
     int b = 1;
     int max_a, max_b, max_c = 0;;
     while ((b = next_prime(b)) <= 1000)
