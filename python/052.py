@@ -1,6 +1,7 @@
 #
 # Problem 52 - Permuted multiples
 #
+import time
 
 def is_permutation(n, m):
     list = [0] * 10
@@ -16,19 +17,28 @@ def is_permutation(n, m):
 
 def main():
 
-    n = 1
     found = False
+    start = 1
+    result = -1
     while not found:
+        start *= 10
 
-        found = True
-        for i in range(1, 7):
-            if not is_permutation(n, n*i):
-                found = False
+        for n in range(start//10, start//6+1):
+            found = True
+            for i in range(1, 7):
+                if not is_permutation(n, n*i):
+                    found = False
+                    result = n
+                    break
+
+            if found:
                 break
-        n+=1
 
-    print(n-1)
+    print(result)
 
 
 if __name__ == '__main__':
+    t_start = time.time()
     main()
+    t_stop = time.time()
+    print(t_stop-t_stop)
