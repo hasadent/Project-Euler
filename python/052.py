@@ -41,4 +41,4 @@ if __name__ == '__main__':
     t_start = time.time()
     main()
     t_stop = time.time()
-    print(t_stop-t_stop)
+    print(t_stop-t_start)
