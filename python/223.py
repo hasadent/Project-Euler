@@ -24,8 +24,6 @@ def divisor_generator(n):
     return divisor
 
 def get_divisor(n):
-    global p_list
-
     if n < d_size:
         return d_list[n]
 
@@ -57,42 +55,44 @@ def main():
     #limit =       25 # 14
     #limit =      100 # 72
     #limit =      250 # 212
-    #limit =    10000 # 13656
-    limit =  2500000 # 5352755 (245s)
-    #limit = 25000000 # 61614848 (3324s)
-    result = 0
+    #limit =    10000 # 13656   
+    limit =  2500000 # 5352755
+    #limit = 25000000 # 61614848  (989s)
+    result = (limit - 1) // 2
+    upper  = int((limit + 1) / (2 + 2 ** 0.5))
 
-    dv1 = get_divisor(1) # k = 1
-    for L in range(3, limit+1, 2):
-        n = (L ** 2 - 1) // 2
-        k = (L - 1) // 2
-
-        dv2 = dv1
-        dv1 = get_divisor(k+1)
-        print
+    dv2 = {1}   # a = 1
+    dv3 = {1, 2} # a = 2
+    for a in range(2, upper+1):
+        dv1 = dv2 # a - 1
+        dv2 = dv3 # a
+        dv3 = get_divisor(a+1)
 
         dv = set()
         for i in dv1:
-            for j in dv2:
+            for j in dv3:
                 dv.add(i*j)
-                dv.add(i*j*2)
-        dv = [x for x in dv if x <= n ** 0.5]
-        #
-        #print("-- %d -- k = %d" % (L, k))
-        #print(dv)
 
-        L2 = L * 2
-        L3 = L * 3
-        for i in dv:
-            d1 = i
-            d2 = n // i
-            if L3 > (d1 + d2) * 2 and d1 * 2 + d2 >= L2:
+        dv = [x for x in dv if x <= a]
+
+        aa = a ** 2 - 1
+        for x in dv:    # x = c - b
+            y = aa // x # y = c + b
+
+            if (x + y) % 2 != 0:
+                continue
+
+            c = (x + y) // 2
+            b = y - c
+
+            if a <= b and b <= c and (a+b+c) <= limit:
                 result += 1
-               # print("%d %d " % (d1, d2))
-        if L % 10000 == 1:
-            print("--- %d" % (L-1))
+
+        if a % 10000 == 1:
+            print("--- %d" % (a-1))
 
     print(result)
+
 
 max_prime = 25000000
 p_list = prime_generator(max_prime)
