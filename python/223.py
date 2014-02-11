@@ -20,14 +20,14 @@ def divisor_generator(n):
     for i in range(1, s+1):
         if n % i == 0:
             divisor.add(i)
-            divisor.add(n/i)
+            divisor.add(n//i)
     return divisor
 
 def get_divisor(n):
     global p_list
 
     if n < d_size:
-        return d_list[int(n)]
+        return d_list[n]
 
     if n in p_set:
         return set([1, n])
@@ -58,14 +58,14 @@ def main():
     #limit =      100 # 72
     #limit =      250 # 212
     #limit =    10000 # 13656
-    #limit =  2500000 # 5352755 (245s)
-    limit = 25000000 # 61614848 (3324s)
+    limit =  2500000 # 5352755 (245s)
+    #limit = 25000000 # 61614848 (3324s)
     result = 0
 
     dv1 = get_divisor(1) # k = 1
     for L in range(3, limit+1, 2):
         n = (L ** 2 - 1) // 2
-        k = (L - 1) / 2
+        k = (L - 1) // 2
 
         dv2 = dv1
         dv1 = get_divisor(k+1)
