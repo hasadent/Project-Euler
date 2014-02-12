@@ -16,7 +16,7 @@ def factorize(n):
             i += 1
 
         if i > 0:
-            factors.append((p, i));
+            factors.append((p, i))
 
     if n > 1: factors.append((n, 1))
 
