@@ -3,71 +3,31 @@
 #
 import time
 
-d_list = [[]]
-d_size = 20001
-
-def init_dg():
-    global d_list
-    for i in range(1, d_size):
-        d_list.append(divisor_generator(i))
-
-def divisor_generator(n):
-    dv = [1]
-
-    if n in p_set:
-        return set([1, n])
+def factorize(n):
+    factors = []
 
     ss = n ** 0.5
-    for i in p_list:
+    for p in p_list:
+        if p > ss: break
 
-        if i > ss:
-            dv = merge_divisor_set(dv, {1, n})
-            break
+        i = 0
+        while n % p == 0:
+            n //= p
+            i += 1
 
-        c = 0
-        while (n % i == 0):
-            c += 1
-            n //= i
+        if i > 0:
+            factors.append((p, i));
 
-        if c != 0:
-            dv_i = [i**j for j in range(0,c+1)]
-            dv = merge_divisor_set(dv, dv_i)
+    if n > 1: factors.append((n, 1))
 
-        if n == 1:
-            break
-
-    return dv
-
-def merge_divisor_set(n, m):
-    d = set()
-    for i in n:
-        for j in m:
-            d.add(i*j)
-    return d
+    return factors
 
 def get_divisor(n):
-    if n < d_size:
-        return d_list[n]
-
-    if n == 1:
-        return [1]
-
-    if n in p_set:
-        return set([1, n])
-
-    for i in p_list:
-
-        c = 0
-        while (n % i == 0):
-            c += 1
-            n //= i
-
-        if c != 0:
-            dv_i = [i**j for j in range(0,c+1)]
-            dv = get_divisor(n)
-            return merge_divisor_set(dv, dv_i)
-
-    return -1
+    f = factorize(n)
+    div = [1]
+    for (p, r) in f:
+        div = [d * p**e for d in div for e in range(r + 1)]
+    return div
 
 def prime_generator(n):
     sieve = [True] * n
@@ -94,7 +54,7 @@ def main():
         dv2 = dv3 # a
         dv3 = get_divisor(a+1)
 
-        dv = merge_divisor_set(dv1, dv3)
+        dv = {d1*d2 for d1 in dv1 for d2 in dv3}
         dv = [x for x in dv if x <= a]
 
         aa = a ** 2 - 1
@@ -116,10 +76,8 @@ def main():
     print(result)
 
 
-max_prime = 25000000
+max_prime = int(25000000**0.5+1)
 p_list = prime_generator(max_prime)
-p_set = set(p_list)
-init_dg()
 
 if __name__ == '__main__':
     t_start = time.time()
