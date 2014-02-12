@@ -4,7 +4,7 @@
 import time
 
 d_list = [[]]
-d_size = 5001
+d_size = 20001
 
 def init_dg():
     global d_list
@@ -12,37 +12,62 @@ def init_dg():
         d_list.append(divisor_generator(i))
 
 def divisor_generator(n):
-    divisor = set()
-    divisor.add(1)
-    divisor.add(n)
+    dv = [1]
 
-    s = int(n ** 0.5)
-    for i in range(1, s+1):
-        if n % i == 0:
-            divisor.add(i)
-            divisor.add(n//i)
-    return divisor
+    if n in p_set:
+        return set([1, n])
+
+    ss = n ** 0.5
+    for i in p_list:
+
+        if i > ss:
+            dv = merge_divisor_set(dv, {1, n})
+            break
+
+        c = 0
+        while (n % i == 0):
+            c += 1
+            n //= i
+
+        if c != 0:
+            dv_i = [i**j for j in range(0,c+1)]
+            dv = merge_divisor_set(dv, dv_i)
+
+        if n == 1:
+            break
+
+    return dv
+
+def merge_divisor_set(n, m):
+    d = set()
+    for i in n:
+        for j in m:
+            d.add(i*j)
+    return d
 
 def get_divisor(n):
     if n < d_size:
         return d_list[n]
 
+    if n == 1:
+        return [1]
+
     if n in p_set:
         return set([1, n])
 
-    for i in range(2, d_size):
-        if (n % i == 0):
-            dv1 = get_divisor(i)
-            dv2 = get_divisor(n//i)
+    for i in p_list:
 
-            dv = set()
-            for i in dv1:
-                for j in dv2:
-                    dv.add(i*j)
-            return dv
+        c = 0
+        while (n % i == 0):
+            c += 1
+            n //= i
 
-    print("--- ?? %d" % (n))
-    return [1, n]
+        if c != 0:
+            dv_i = [i**j for j in range(0,c+1)]
+            dv = get_divisor(n)
+            return merge_divisor_set(dv, dv_i)
+
+    return -1
 
 def prime_generator(n):
     sieve = [True] * n
@@ -55,7 +80,8 @@ def main():
     #limit =       25 # 14
     #limit =      100 # 72
     #limit =      250 # 212
-    #limit =    10000 # 13656   
+    #limit =    10000 # 13656
+    #limit =    50000 # 79633
     limit =  2500000 # 5352755
     #limit = 25000000 # 61614848  (989s)
     result = (limit - 1) // 2
@@ -68,11 +94,7 @@ def main():
         dv2 = dv3 # a
         dv3 = get_divisor(a+1)
 
-        dv = set()
-        for i in dv1:
-            for j in dv3:
-                dv.add(i*j)
-
+        dv = merge_divisor_set(dv1, dv3)
         dv = [x for x in dv if x <= a]
 
         aa = a ** 2 - 1
