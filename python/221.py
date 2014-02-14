@@ -2,9 +2,7 @@
 # Problem 221 - Alexandrian Integers
 #
 #
-#  In this problem, upper bound is set as 5*10^6 to guarantee the 150000th
-#    Alexandrian integer will be generated, but it is not good enough. To
-#    figure out how to set the upper bound is required.
+#  When p = 87388, the 150000th number are generated.
 #
 import time
 
@@ -42,31 +40,28 @@ def prime_generator(n):
     return [2] + [i for i in range(3,n,2) if sieve[i]]
 
 def main():
-    limit = 10 ** 5 * 5
+
+    limit = int(10 ** 5 * 5)
     # 150000th is 1884161251122450
     #   1000th is 772168278
 
     p = 1
     n = 0
     r = set()
-    while len(r) < limit:
+    for p in range(1, 87388):
         pp = p**2
-
-        if (p > max_prime):
-            print("need more prime")
-            break
-
-        d = get_divisor(pp+1)
-        for k in d[len(d)//2:]:
-            A = (pp + p*k) * ((pp+1)//k+p)
+        div = get_divisor(pp+1)
+        for d in div:
+            A =  p * (p + d) * (p + (pp+1)//d)
             r.add(A)
         p += 1
+
     r = sorted(list(r))
     print(r[1000-1])
     print(r[150000-1])
     pass
 
-max_prime = int(100000000)
+max_prime = int(87388)
 p_list = prime_generator(max_prime)
 if __name__ == '__main__':
     t_start = time.time()
